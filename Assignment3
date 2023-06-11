@@ -1,1 +1,81 @@
+// Import necessary dependencies
+import React from "react";
+import { View, Button, Text } from "react-native";
+import { createStackNavigator } from "react-navigation-stack";
+import { createAppContainer } from "react-navigation";
 
+// Profile screen component
+class ProfileScreen extends React.Component {
+  render() {
+    const { navigation } = this.props;
+    const userName = navigation.getParam("userName", "Unknown");
+    const age = navigation.getParam("age", "Unknown");
+
+    return (
+      <View>
+        <Text>Welcome, {userName}!</Text>
+        <Text>Age: {age}</Text>
+      </View>
+    );
+  }
+}
+
+// Signup screen component
+class SignupScreen extends React.Component {
+  state = {
+    userName: "",
+    age: "",
+  };
+
+  handleSignup = () => {
+    const { navigation } = this.props;
+    const { userName, age } = this.state;
+
+    navigation.navigate("Profile", { userName, age });
+  };
+
+  render() {
+    return (
+      <View>
+        <Button title="Go to Profile" onPress={this.handleSignup} />
+      </View>
+    );
+  }
+}
+
+// Login screen component
+class LoginScreen extends React.Component {
+  handleLogin = () => {
+    const { navigation } = this.props;
+
+    navigation.navigate("Profile", { userName: "John Doe", age: "25" });
+  };
+
+  render() {
+    return (
+      <View>
+        <Button title="Go to Profile" onPress={this.handleLogin} />
+      </View>
+    );
+  }
+}
+
+// Create the stack navigator
+const AppNavigator = createStackNavigator(
+  {
+    Login: LoginScreen,
+    Signup: SignupScreen,
+    Profile: ProfileScreen,
+  },
+  {
+    initialRouteName: "Login", // Set the initial screen
+  }
+);
+
+// Create the app container
+const AppContainer = createAppContainer(AppNavigator);
+
+// Render the app container
+export default function App() {
+  return <AppContainer />;
+}
